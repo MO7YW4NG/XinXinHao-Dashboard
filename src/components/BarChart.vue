@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import { Bar } from 'vue-chartjs';
+import { defineComponent, type PropType } from 'vue'
+import { Bar } from 'vue-chartjs'
 import {
   Chart as ChartJS,
   Title,
@@ -16,8 +16,8 @@ import {
   CategoryScale,
   LinearScale,
   type ChartData,
-  type ChartOptions,
-} from 'chart.js';
+  type ChartOptions
+} from 'chart.js'
 
 // 註冊必要的 Chart.js 組件
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
@@ -42,19 +42,19 @@ export default defineComponent({
             position: 'top',
             labels: {
               font: {
-                size: 14,
-              },
-            },
+                size: 14
+              }
+            }
           },
           title: {
             display: true,
             position: 'bottom',
             text: 'Bar Chart Example',
             font: {
-              size: 18,
-            },
-          },
-        },
+              size: 18
+            }
+          }
+        }
         // scales: {
         //   x: {
         //     title: {
@@ -76,8 +76,8 @@ export default defineComponent({
         //     },
         //   },
         // },
-      }),
+      })
     }
   }
-});
+})
 </script>

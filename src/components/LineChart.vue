@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue';
-import { Line } from 'vue-chartjs';
+import { defineComponent, type PropType } from 'vue'
+import { Line } from 'vue-chartjs'
 import {
   Chart as ChartJS,
   Title,
@@ -18,10 +18,10 @@ import {
   CategoryScale,
   type ChartData,
   type ChartOptions
-} from 'chart.js';
+} from 'chart.js'
 
 // 註冊必要的 Chart.js 組件
-ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale);
+ChartJS.register(Title, Tooltip, Legend, LineElement, PointElement, LinearScale, CategoryScale)
 
 export default defineComponent({
   name: 'LineChart',
@@ -44,12 +44,12 @@ export default defineComponent({
             position: 'bottom',
             text: 'Bar Chart Example',
             font: {
-              size: 18,
-            },
-          },
+              size: 18
+            }
+          }
         }
       })
     }
   }
-});
+})
 </script>

@@ -15,14 +15,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import LineChart from './LineChart.vue';
-import BarChart from './BarChart.vue';
-import type { ChartData } from 'chart.js';
+import { defineComponent } from 'vue'
+import LineChart from './LineChart.vue'
+import BarChart from './BarChart.vue'
+import type { ChartData } from 'chart.js'
 
 interface Stat {
-  title: string;
-  value: number;
+  title: string
+  value: number
 }
 
 export default defineComponent({
@@ -57,13 +57,13 @@ export default defineComponent({
             label: 'Type Played',
             backgroundColor: '#42A5F5',
             borderColor: '#1E88E5',
-            data: [40, 39, 10, 40, 39, 80, 40],
+            data: [40, 39, 10, 40, 39, 80, 40]
           }
         ]
       } as ChartData<'bar'>
-    };
+    }
   }
-});
+})
 </script>
 
 <style scoped>
