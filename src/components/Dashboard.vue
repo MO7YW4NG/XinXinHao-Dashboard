@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <h1>Car Learner Quiz Game Dashboard</h1>
+    <h1>行行好-後台數據儀表板</h1>
     <div class="charts">
       <div class="chart">
         <h2>Quiz Performance by Topic</h2>
@@ -232,6 +232,9 @@ export default defineComponent({
         }
       };
     };
+
+    Chart.defaults.color = '#CBF7ED';
+
     const createTopicPerformanceChart = (data: { [key: string]: number }) => {
       if (topicPerformanceChart.value) {
         new Chart(topicPerformanceChart.value, {
@@ -244,7 +247,6 @@ export default defineComponent({
               fill: true,
               backgroundColor: 'rgba(75, 192, 192, 0.2)',
               borderColor: 'rgb(75, 192, 192)',
-              pointBackgroundColor: 'rgb(75, 192, 192)',
               pointBorderColor: '#fff',
               pointHoverBackgroundColor: '#fff',
               pointHoverBorderColor: 'rgb(75, 192, 192)'
@@ -255,7 +257,10 @@ export default defineComponent({
             scales: {
               r: {
                 angleLines: {
-                  display: false
+                  display: false,
+                },
+                ticks: {
+                  backdropColor: 'transparent',
                 },
                 suggestedMin: 0,
                 suggestedMax: 100
@@ -574,6 +579,9 @@ export default defineComponent({
                 angleLines: {
                   display: false
                 },
+                ticks: {
+                  backdropColor: 'transparent',
+                },
                 suggestedMin: 0,
                 suggestedMax: 100
               }
@@ -647,7 +655,7 @@ export default defineComponent({
           data: {
             datasets: [{
               label: 'Pass Rate vs Learning Hours',
-              data: data.hours.map((hour, index) => ({x: hour, y: data.passRate[index]})),
+              data: data.hours.map((hour, index) => ({ x: hour, y: data.passRate[index] })),
               backgroundColor: 'rgba(75, 192, 192, 0.6)'
             }]
           },
@@ -752,7 +760,7 @@ export default defineComponent({
       createDemographicChart(policyData.demographics);
       createHoursPassCorrelationChart(policyData.hoursPassCorrelation);
       createRegionalComparisonChart(policyData.regionalComparison);
-      createEcoDrivingChart(policyData.ecoDrivingScores); 
+      createEcoDrivingChart(policyData.ecoDrivingScores);
     });
 
     return {
@@ -773,7 +781,7 @@ export default defineComponent({
       demographicChart,
       hoursPassCorrelationChart,
       regionalComparisonChart,
-      ecoDrivingChart,  
+      ecoDrivingChart,
     };
   },
 });
@@ -781,10 +789,10 @@ export default defineComponent({
 
 <style scoped>
 .dashboard {
-  font-family: Arial, sans-serif;
   max-width: 1800px;
   margin: 0 auto;
   padding: 20px;
+  min-height: 100vh;
 }
 
 .charts {
@@ -794,31 +802,33 @@ export default defineComponent({
 }
 
 .chart {
-  background-color: #f9f9f9;
+  background-color: rgba(64, 110, 142, 0.2);
   border-radius: 8px;
   padding: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   text-align: center;
-  color: white;
+  color: #CBF7ED;
   margin-bottom: 30px;
+  font-size: 2.5em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 h2 {
-  color: #555;
+  color: #8EA8C3;
   margin-bottom: 10px;
   font-size: 1.2em;
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 1400px) {
   .charts {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .charts {
     grid-template-columns: 1fr;
   }
