@@ -48,17 +48,13 @@ import Chart from 'chart.js/auto';
 
 interface GameData {
   topicPerformance: { [key: string]: number };
-  ageDistribution: { [key: string]: number };
   timePerQuestion: { [key: string]: number };
   completionRates: { [key: string]: number };
   challengingTopics: { [key: string]: number };
   modeFreq: { [key: string]: number };
 }
 interface PolicyData {
-  passRates: { [key: string]: number };
-  learningDuration: { [key: string]: number };
   commonMistakes: { [key: string]: number };
-  theoryPerformance: { [key: string]: number };
   demographics: { [key: string]: number };
   hoursPassCorrelation: { hours: number[]; passRate: number[] };
   regionalComparison: { [key: string]: number };
@@ -119,13 +115,6 @@ export default defineComponent({
           '車速掌握': 20,
           '交通燈號': 15,
           '道路觀察': 10
-        },
-        theoryPerformance: {
-          'Road Signs': 85,
-          'Traffic Rules': 78,
-          'Hazard Perception': 72,
-          'Vehicle Safety': 88,
-          'Eco-Driving': 70
         },
         demographics: {
           '18-24': 70,
