@@ -3,72 +3,40 @@
     <h1>行行好-後台數據儀表板</h1>
     <div class="charts">
       <div class="chart">
-        <h2>Quiz Performance by Topic</h2>
+        <h2>玩家答題表現 (依主題)</h2>
         <canvas ref="topicPerformanceChart"></canvas>
       </div>
       <div class="chart">
-        <h2>Age Distribution of Players</h2>
-        <canvas ref="ageDistributionChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>AI Content Usage</h2>
-        <canvas ref="aiContentUsageChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Average Time per Question</h2>
-        <canvas ref="timePerQuestionChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Quiz Completion Rates</h2>
-        <canvas ref="completionRateChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Most Challenging Topics</h2>
-        <canvas ref="challengingTopicsChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Player Improvement Over Time</h2>
-        <canvas ref="playerImprovementChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>AI Content Feedback</h2>
-        <canvas ref="aiContentFeedbackChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Pass Rates by Learning Method</h2>
-        <canvas ref="passRatesChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Average Learning Duration</h2>
-        <canvas ref="learningDurationChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Most Common Mistakes in Practical Tests</h2>
-        <canvas ref="commonMistakesChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Theory Test Performance by Topic</h2>
-        <canvas ref="theoryPerformanceChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Accident Rates for New Drivers</h2>
-        <canvas ref="accidentRatesChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Demographic Distribution of Learners</h2>
+        <h2>玩家年齡分布</h2>
         <canvas ref="demographicChart"></canvas>
       </div>
       <div class="chart">
-        <h2>Correlation: Learning Hours vs. Pass Rate</h2>
+        <h2>常見錯誤 (依類別)</h2>
+        <canvas ref="commonMistakesChart"></canvas>
+      </div>
+      <div class="chart">
+        <h2>平均答題速度</h2>
+        <canvas ref="timePerQuestionChart"></canvas>
+      </div>
+      <div class="chart">
+        <h2>題目完成率 (依主題)</h2>
+        <canvas ref="completionRateChart"></canvas>
+      </div>
+      <div class="chart">
+        <h2>具挑戰性之主題</h2>
+        <canvas ref="challengingTopicsChart"></canvas>
+      </div>
+      <div class="chart">
+        <h2>各遊戲模式總遊玩次數</h2>
+        <canvas ref="modeFreqChart"></canvas>
+      </div>
+      <div class="chart">
+        <h2>學習時長對及格率之影響</h2>
         <canvas ref="hoursPassCorrelationChart"></canvas>
       </div>
       <div class="chart">
-        <h2>Regional Performance Comparison</h2>
+        <h2>玩家答題表現 (依區域)</h2>
         <canvas ref="regionalComparisonChart"></canvas>
-      </div>
-      <div class="chart">
-        <h2>Eco-Driving Awareness Scores</h2>
-        <canvas ref="ecoDrivingChart"></canvas>
       </div>
     </div>
   </div>
@@ -81,117 +49,76 @@ import Chart from 'chart.js/auto';
 interface GameData {
   topicPerformance: { [key: string]: number };
   ageDistribution: { [key: string]: number };
-  timePerQuestion: number[];
-  aiContentUsage: { [key: string]: number };
+  timePerQuestion: { [key: string]: number };
   completionRates: { [key: string]: number };
   challengingTopics: { [key: string]: number };
-  playerImprovement: { [key: string]: number[] };
-  aiContentFeedback: { [key: string]: number };
+  modeFreq: { [key: string]: number };
 }
 interface PolicyData {
   passRates: { [key: string]: number };
   learningDuration: { [key: string]: number };
   commonMistakes: { [key: string]: number };
   theoryPerformance: { [key: string]: number };
-  accidentRates: { [key: string]: number };
   demographics: { [key: string]: number };
   hoursPassCorrelation: { hours: number[]; passRate: number[] };
   regionalComparison: { [key: string]: number };
-  ecoDrivingScores: { [key: string]: number };
 }
 
 export default defineComponent({
   name: 'CarLearnerQuizDashboard',
   setup() {
     const topicPerformanceChart = ref<HTMLCanvasElement | null>(null);
-    const ageDistributionChart = ref<HTMLCanvasElement | null>(null);
     const timePerQuestionChart = ref<HTMLCanvasElement | null>(null);
-    const aiContentUsageChart = ref<HTMLCanvasElement | null>(null);
     const completionRateChart = ref<HTMLCanvasElement | null>(null);
     const challengingTopicsChart = ref<HTMLCanvasElement | null>(null);
-    const playerImprovementChart = ref<HTMLCanvasElement | null>(null);
-    const aiContentFeedbackChart = ref<HTMLCanvasElement | null>(null);
+    const modeFreqChart = ref<HTMLCanvasElement | null>(null);
 
-    const passRatesChart = ref<HTMLCanvasElement | null>(null);
-    const learningDurationChart = ref<HTMLCanvasElement | null>(null);
     const commonMistakesChart = ref<HTMLCanvasElement | null>(null);
-    const theoryPerformanceChart = ref<HTMLCanvasElement | null>(null);
-    const accidentRatesChart = ref<HTMLCanvasElement | null>(null);
     const demographicChart = ref<HTMLCanvasElement | null>(null);
     const hoursPassCorrelationChart = ref<HTMLCanvasElement | null>(null);
     const regionalComparisonChart = ref<HTMLCanvasElement | null>(null);
-    const ecoDrivingChart = ref<HTMLCanvasElement | null>(null);
 
     const fetchGameData = (): GameData => {
       // Simulated data fetch
       return {
         topicPerformance: {
-          'Road Signs': 85,
-          'Traffic Rules': 78,
-          'Vehicle Operation': 92,
-          'Safety Procedures': 88,
-          'Parking Techniques': 75
+          '道路標誌': 85,
+          '交通規則': 78,
+          '車輛操作': 92,
+          '安全流程': 88,
+          '停車操作': 75
         },
-        ageDistribution: {
-          '18-19': 30,
-          '20-21': 40,
-          '22-24': 30
-        },
-        timePerQuestion: [20, 25, 18, 30, 22, 28, 15, 35, 24, 19],
-        aiContentUsage: {
-          'Storylines': 95,
-          'Quizzes': 100,
-          'Sound Effects': 80,
-          'Voiceovers': 90,
-          'Images': 85,
-          'Videos': 75
-        },
+        timePerQuestion: { '道路標誌':20, '交通規則': 25,'車輛操作': 18, '安全流程': 30, '停車操作':22},
         completionRates: {
-          'Beginner': 95,
-          'Intermediate': 85,
-          'Advanced': 70
+          '道路標誌': 98,
+          '交通規則': 70,
+          '車輛操作': 72,
+          '安全流程': 89,
+          '停車操作': 80
         },
         challengingTopics: {
-          'Road Signs': 15,
-          'Traffic Rules': 25,
-          'Vehicle Operation': 10,
-          'Safety Procedures': 20,
-          'Parking Techniques': 30
+          '道路標誌': 15,
+          '交通規則': 25,
+          '車輛操作': 10,
+          '安全流程': 20,
+          '停車操作': 30
         },
-        playerImprovement: {
-          'Week 1': [60, 65, 70, 75, 80],
-          'Week 2': [65, 70, 75, 80, 85],
-          'Week 3': [70, 75, 80, 85, 90],
-          'Week 4': [75, 80, 85, 90, 95]
-        },
-        aiContentFeedback: {
-          'Very Helpful': 60,
-          'Somewhat Helpful': 30,
-          'Not Helpful': 10
+        modeFreq: {
+          '隨機對戰': 231,
+          '情景模式': 150,
+          '考試模式': 207,
         },
       };
     };
     const fetchPolicyData = (): PolicyData => {
       // Simulated data fetch
       return {
-        passRates: {
-          'Traditional': 75,
-          'Online + Practical': 82,
-          'Intensive Course': 78,
-          'VR Simulation': 85
-        },
-        learningDuration: {
-          'Traditional': 6,
-          'Online + Practical': 5,
-          'Intensive Course': 2,
-          'VR Simulation': 4
-        },
         commonMistakes: {
-          'Parallel Parking': 30,
-          'Merging': 25,
-          'Speed Control': 20,
-          'Signaling': 15,
-          'Observation': 10
+          '路邊停車': 25,
+          '變換車道': 30,
+          '車速掌握': 20,
+          '交通燈號': 15,
+          '道路觀察': 10
         },
         theoryPerformance: {
           'Road Signs': 85,
@@ -200,36 +127,22 @@ export default defineComponent({
           'Vehicle Safety': 88,
           'Eco-Driving': 70
         },
-        accidentRates: {
-          '0-6 months': 8,
-          '6-12 months': 6,
-          '12-18 months': 4,
-          '18-24 months': 3
-        },
         demographics: {
-          '18-24': 40,
-          '25-34': 30,
-          '35-44': 15,
-          '45+': 15
+          '18-24': 70,
+          '25-34': 20,
+          '35-44': 5,
+          '45+': 5
         },
         hoursPassCorrelation: {
           hours: [20, 30, 40, 50, 60, 70, 80],
           passRate: [60, 70, 75, 80, 85, 88, 90]
         },
         regionalComparison: {
-          'North': 82,
-          'South': 78,
-          'East': 80,
-          'West': 75,
-          'Central': 85
+          '北部': 82,
+          '中部': 78,
+          '南部': 75,
+          '東部': 85
         },
-        ecoDrivingScores: {
-          'Fuel Efficiency': 75,
-          'Smooth Acceleration': 70,
-          'Proper Gear Usage': 65,
-          'Anticipation': 80,
-          'Idle Reduction': 85
-        }
       };
     };
 
@@ -242,7 +155,7 @@ export default defineComponent({
           data: {
             labels: Object.keys(data),
             datasets: [{
-              label: 'Performance (%)',
+              label: '及格率 (%)',
               data: Object.values(data),
               fill: true,
               backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -271,47 +184,15 @@ export default defineComponent({
       }
     };
 
-    const createAgeDistributionChart = (data: { [key: string]: number }) => {
-      if (ageDistributionChart.value) {
-        new Chart(ageDistributionChart.value, {
-          type: 'pie',
-          data: {
-            labels: Object.keys(data),
-            datasets: [{
-              data: Object.values(data),
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.8)',
-                'rgba(54, 162, 235, 0.8)',
-                'rgba(255, 206, 86, 0.8)'
-              ]
-            }]
-          },
-          options: {
-            radius: '50%',
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'top',
-              },
-              title: {
-                display: true,
-                text: 'Age Distribution (%)'
-              }
-            }
-          }
-        });
-      }
-    };
-
-    const createTimePerQuestionChart = (data: number[]) => {
+    const createTimePerQuestionChart = (data: {[key: string]: number }) => {
       if (timePerQuestionChart.value) {
         new Chart(timePerQuestionChart.value, {
           type: 'bar',
           data: {
-            labels: data.map((_, index) => `Q${index + 1}`),
+            labels: Object.keys(data),
             datasets: [{
-              label: 'Time (seconds)',
-              data: data,
+              label: '時間 (秒)',
+              data: Object.values(data),
               backgroundColor: 'rgba(153, 102, 255, 0.6)'
             }]
           },
@@ -322,7 +203,7 @@ export default defineComponent({
                 beginAtZero: true,
                 title: {
                   display: true,
-                  text: 'Seconds'
+                  text: '秒'
                 }
               }
             }
@@ -330,41 +211,6 @@ export default defineComponent({
         });
       }
     };
-
-    const createAIContentUsageChart = (data: { [key: string]: number }) => {
-      if (aiContentUsageChart.value) {
-        new Chart(aiContentUsageChart.value, {
-          type: 'doughnut',
-          data: {
-            labels: Object.keys(data),
-            datasets: [{
-              data: Object.values(data),
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.8)',
-                'rgba(54, 162, 235, 0.8)',
-                'rgba(255, 206, 86, 0.8)',
-                'rgba(75, 192, 192, 0.8)',
-                'rgba(153, 102, 255, 0.8)',
-                'rgba(255, 159, 64, 0.8)'
-              ]
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'right',
-              },
-              title: {
-                display: true,
-                text: 'AI Content Usage (%)'
-              }
-            }
-          }
-        });
-      }
-    };
-
     const createCompletionRateChart = (data: { [key: string]: number }) => {
       if (completionRateChart.value) {
         new Chart(completionRateChart.value, {
@@ -372,7 +218,7 @@ export default defineComponent({
           data: {
             labels: Object.keys(data),
             datasets: [{
-              label: 'Completion Rate (%)',
+              label: '完成率 (%)',
               data: Object.values(data),
               backgroundColor: 'rgba(75, 192, 192, 0.6)'
             }]
@@ -398,7 +244,7 @@ export default defineComponent({
           data: {
             labels: Object.keys(data),
             datasets: [{
-              label: 'Difficulty Score',
+              label: '困難指數',
               data: Object.values(data),
               backgroundColor: 'rgba(255, 99, 132, 0.6)'
             }]
@@ -416,103 +262,23 @@ export default defineComponent({
       }
     };
 
-    const createPlayerImprovementChart = (data: { [key: string]: number[] }) => {
-      if (playerImprovementChart.value) {
-        new Chart(playerImprovementChart.value, {
-          type: 'line',
-          data: {
-            labels: Object.keys(data),
-            datasets: Object.entries(data).map(([week, scores], index) => ({
-              label: week,
-              data: scores,
-              borderColor: `hsl(${index * 60}, 70%, 50%)`,
-              tension: 0.1
-            }))
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 100
-              }
-            }
-          }
-        });
-      }
-    };
-
-    const createAIContentFeedbackChart = (data: { [key: string]: number }) => {
-      if (aiContentFeedbackChart.value) {
-        new Chart(aiContentFeedbackChart.value, {
-          type: 'pie',
-          data: {
-            labels: Object.keys(data),
-            datasets: [{
-              data: Object.values(data),
-              backgroundColor: [
-                'rgba(75, 192, 192, 0.8)',
-                'rgba(255, 206, 86, 0.8)',
-                'rgba(255, 99, 132, 0.8)'
-              ]
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'right',
-              },
-              title: {
-                display: true,
-                text: 'AI Content Feedback'
-              }
-            }
-          }
-        });
-      }
-    };
-    const createPassRatesChart = (data: { [key: string]: number }) => {
-      if (passRatesChart.value) {
-        new Chart(passRatesChart.value, {
+    const createModeFreqChart = (data: { [key: string]: number }) => {
+      if (modeFreqChart.value) {
+        new Chart(modeFreqChart.value, {
           type: 'bar',
           data: {
             labels: Object.keys(data),
             datasets: [{
-              label: 'Pass Rate (%)',
+              label: '次數',
               data: Object.values(data),
-              backgroundColor: 'rgba(75, 192, 192, 0.6)'
+              backgroundColor: 'rgba(54, 162, 235, 0.6)'
             }]
           },
           options: {
+            indexAxis: 'y',
             responsive: true,
             scales: {
-              y: {
-                beginAtZero: true,
-                max: 100
-              }
-            }
-          }
-        });
-      }
-    };
-
-    const createLearningDurationChart = (data: { [key: string]: number }) => {
-      if (learningDurationChart.value) {
-        new Chart(learningDurationChart.value, {
-          type: 'bar',
-          data: {
-            labels: Object.keys(data),
-            datasets: [{
-              label: 'Average Duration (months)',
-              data: Object.values(data),
-              backgroundColor: 'rgba(255, 159, 64, 0.6)'
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
+              x: {
                 beginAtZero: true
               }
             }
@@ -546,69 +312,7 @@ export default defineComponent({
               },
               title: {
                 display: true,
-                text: 'Percentage of Errors'
-              }
-            }
-          }
-        });
-      }
-    };
-
-    const createTheoryPerformanceChart = (data: { [key: string]: number }) => {
-      if (theoryPerformanceChart.value) {
-        new Chart(theoryPerformanceChart.value, {
-          type: 'radar',
-          data: {
-            labels: Object.keys(data),
-            datasets: [{
-              label: 'Performance (%)',
-              data: Object.values(data),
-              fill: true,
-              backgroundColor: 'rgba(54, 162, 235, 0.2)',
-              borderColor: 'rgb(54, 162, 235)',
-              pointBackgroundColor: 'rgb(54, 162, 235)',
-              pointBorderColor: '#fff',
-              pointHoverBackgroundColor: '#fff',
-              pointHoverBorderColor: 'rgb(54, 162, 235)'
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              r: {
-                angleLines: {
-                  display: false
-                },
-                ticks: {
-                  backdropColor: 'transparent',
-                },
-                suggestedMin: 0,
-                suggestedMax: 100
-              }
-            }
-          }
-        });
-      }
-    };
-
-    const createAccidentRatesChart = (data: { [key: string]: number }) => {
-      if (accidentRatesChart.value) {
-        new Chart(accidentRatesChart.value, {
-          type: 'line',
-          data: {
-            labels: Object.keys(data),
-            datasets: [{
-              label: 'Accident Rate (%)',
-              data: Object.values(data),
-              borderColor: 'rgb(255, 99, 132)',
-              tension: 0.1
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true
+                text: '失誤率 (%)'
               }
             }
           }
@@ -640,7 +344,7 @@ export default defineComponent({
               },
               title: {
                 display: true,
-                text: 'Age Distribution (%)'
+                text: '年齡占比 (%)'
               }
             }
           }
@@ -654,7 +358,7 @@ export default defineComponent({
           type: 'scatter',
           data: {
             datasets: [{
-              label: 'Pass Rate vs Learning Hours',
+              label: '及格率 vs 學習時長',
               data: data.hours.map((hour, index) => ({ x: hour, y: data.passRate[index] })),
               backgroundColor: 'rgba(75, 192, 192, 0.6)'
             }]
@@ -665,13 +369,13 @@ export default defineComponent({
               x: {
                 title: {
                   display: true,
-                  text: 'Learning Hours'
+                  text: '學習時長 (分)'
                 }
               },
               y: {
                 title: {
                   display: true,
-                  text: 'Pass Rate (%)'
+                  text: '及格率 (%)'
                 },
                 beginAtZero: true,
                 max: 100
@@ -689,7 +393,7 @@ export default defineComponent({
           data: {
             labels: Object.keys(data),
             datasets: [{
-              label: 'Pass Rate (%)',
+              label: '及格率 (%)',
               data: Object.values(data),
               backgroundColor: 'rgba(153, 102, 255, 0.6)'
             }]
@@ -706,82 +410,33 @@ export default defineComponent({
         });
       }
     };
-
-    const createEcoDrivingChart = (data: { [key: string]: number }) => {
-      if (ecoDrivingChart.value) {
-        new Chart(ecoDrivingChart.value, {
-          type: 'radar',
-          data: {
-            labels: Object.keys(data),
-            datasets: [{
-              label: 'Eco-Driving Score',
-              data: Object.values(data),
-              fill: true,
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              borderColor: 'rgb(75, 192, 192)',
-              pointBackgroundColor: 'rgb(75, 192, 192)',
-              pointBorderColor: '#fff',
-              pointHoverBackgroundColor: '#fff',
-              pointHoverBorderColor: 'rgb(75, 192, 192)'
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              r: {
-                angleLines: {
-                  display: false
-                },
-                suggestedMin: 0,
-                suggestedMax: 100
-              }
-            }
-          }
-        });
-      }
-    };
     onMounted(() => {
       const gameData = fetchGameData();
       createTopicPerformanceChart(gameData.topicPerformance);
-      createAgeDistributionChart(gameData.ageDistribution);
       createTimePerQuestionChart(gameData.timePerQuestion);
-      createAIContentUsageChart(gameData.aiContentUsage);
       createCompletionRateChart(gameData.completionRates);
       createChallengingTopicsChart(gameData.challengingTopics);
-      createPlayerImprovementChart(gameData.playerImprovement);
-      createAIContentFeedbackChart(gameData.aiContentFeedback);
+      createModeFreqChart(gameData.modeFreq);
 
       const policyData = fetchPolicyData();
-      createPassRatesChart(policyData.passRates);
-      createLearningDurationChart(policyData.learningDuration);
       createCommonMistakesChart(policyData.commonMistakes);
-      createTheoryPerformanceChart(policyData.theoryPerformance);
-      createAccidentRatesChart(policyData.accidentRates);
       createDemographicChart(policyData.demographics);
       createHoursPassCorrelationChart(policyData.hoursPassCorrelation);
       createRegionalComparisonChart(policyData.regionalComparison);
-      createEcoDrivingChart(policyData.ecoDrivingScores);
     });
 
     return {
       topicPerformanceChart,
-      ageDistributionChart,
       timePerQuestionChart,
-      aiContentUsageChart,
       completionRateChart,
       challengingTopicsChart,
-      playerImprovementChart,
-      aiContentFeedbackChart,
+      modeFreqChart,
 
-      passRatesChart,
-      learningDurationChart,
       commonMistakesChart,
-      theoryPerformanceChart,
-      accidentRatesChart,
+
       demographicChart,
       hoursPassCorrelationChart,
       regionalComparisonChart,
-      ecoDrivingChart,
     };
   },
 });
