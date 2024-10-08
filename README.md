@@ -1,4 +1,6 @@
-# xinxinhao
+# 行行好 XinXinHao
+
+第二屆解決未來問題能力競賽 - 碳碳團隊
 
 This template should help get you started developing with Vue 3 in Vite.
 
